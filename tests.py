@@ -20,7 +20,6 @@ def test():
 
     # print(get_file_content("calculator", "lorem.txt"))
     # print("")
-
     # print("Result for 'main.py' file:")
     # print(get_file_content("calculator", "main.py"))
     # print("Result for 'pkg/calculator.py' file:")
