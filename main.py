@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from call_function import available_functions
+from call_function import call_function, available_functions
 
 
 def main():
@@ -55,8 +55,18 @@ def generate_content(client, messages, isVerbose):
     if not response.function_calls:
         print(response.text)
         return
+
+    function_responses = []
     for func in response.function_calls:
-        print(f"Calling function: {func.name}({func.args})")
+        result = call_function(func, isVerbose)
+        if not result.parts or not result.parts[0].function_response:
+            raise Exception("empty function call result")
+        if isVerbose:
+            print(f"-> {result.parts[0].function_response.response}")
+        function_responses.append(result.parts[0])
+
+    if not function_responses:
+        raise Exception("no function responses generated, exiting.")
 
 
 if __name__ == "__main__":
